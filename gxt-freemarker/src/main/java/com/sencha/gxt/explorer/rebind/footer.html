@@ -1,0 +1,65 @@
+</textarea>
+
+<script src="../../samples/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+  var type = "{type}";
+  if (type == ("{" + "type}")) {
+    // something went wrong, use java as default
+    type = "java";
+  }
+  var editor = ace.edit("source");
+  var mode = "ace/mode/" + type;
+  var theme = "ace/theme/chrome";
+  var readOnly = true;
+  editor.getSession().setMode(mode);
+  editor.getSession().setUseWorker(false);
+  editor.setTheme(theme);
+  editor.setShowPrintMargin(false);
+  editor.renderer.setShowGutter(true);
+  editor.setHighlightActiveLine(false);
+  editor.setDisplayIndentGuides(true);
+  editor.setReadOnly(readOnly);
+  editor.renderer.setPadding(10);
+  editor.renderer.setScrollMargin(10, 10, 0, 0);
+
+  editor.getSession().setOptions({
+    tabSize: 8,
+    useSoftTabs: true,
+    useWrapMode: false,
+  });
+
+  var count = 0;
+  var foldWatch;
+  foldWatch = window.setInterval(function() {
+    if (!editor.getSession().foldWidgets) {
+      return true;
+    }
+    // call foldAll to force it to identify all fold widgets
+    editor.getSession().foldAll();
+    editor.getSession().unfold();
+    // disable focus
+    editor.textInput.getElement().style.display='none';
+    if (count++ > 20) {
+      // cancel. can't find it
+      window.clearInterval(foldWatch);
+      return false;
+    }
+    var session = editor.getSession();
+    var fw = session.foldWidgets;
+    if (fw[0] == "start") {
+      // license is on first line.  anything else can remain unfolded
+      for (var i = 1; i < fw.length; i++) {
+        if (fw[i] == "start") {
+          session.foldAll(0, i - 1);
+          break;
+        }
+      }
+    }
+    window.clearInterval(foldWatch);
+    return false;
+  }, 100);
+
+
+</script>
+</body>
+</html>

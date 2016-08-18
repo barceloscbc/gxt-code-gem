@@ -1,0 +1,390 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>9</version>
+  </parent>
+  <groupId>com.sencha.gxt</groupId>
+  <artifactId>gxt-parent</artifactId>
+  <version>4.0.0</version>
+  <packaging>pom</packaging>
+  <name>Sencha GXT Parent Project</name>
+
+  <properties>
+    <!-- Global build settings -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Global build versions -->
+    <java.version>1.6</java.version>
+    <gwt.version>2.7.0</gwt.version>
+    <gwt.plugin.version>2.7.0</gwt.plugin.version>
+    <phantomjs.version>1.9.2</phantomjs.version>
+
+    <!-- Global GWT compiler settings -->
+    <gwt.compiler.strict>true</gwt.compiler.strict>
+    <gwt.extraJvmArgs>-Xmx2g -XX:MaxPermSize=1g</gwt.extraJvmArgs>
+
+    <!-- Global GWT test settings -->
+    <gwt.test.mode>htmlunit</gwt.test.mode>
+    <gwt.test.htmlunit>FF17</gwt.test.htmlunit>
+    <gwt.test.testTimeOut>480</gwt.test.testTimeOut>
+    <gwt.test.prod>true</gwt.test.prod>
+    <gwt.testMethodTimeout>15</gwt.testMethodTimeout>
+
+    <!--
+    Global license info to embed into the release,
+    You can change at build time to eval with -Dlicense=eval or gpl with -Dlicense=gpl
+    -->
+    <license>commercial</license>
+    <license.fromYear>2006</license.fromYear>
+    <license.thruYear>2015</license.thruYear>
+    <license.email>licensing@sencha.com</license.email>
+    <license.url>http://www.sencha.com/products/gxt/license/</license.url>
+
+    <!-- Global links to embed into the release -->
+    <link.product>http://www.sencha.com/products/gxt/</link.product>
+    <link.examples>http://www.sencha.com/examples/</link.examples>
+    <link.documentation>http://docs.sencha.com/gxt/4.x/</link.documentation>
+    <link.releaseNotes>http://docs.sencha.com/gxt/4.x/announcements/release_notes.html</link.releaseNotes>
+    <link.gettingStarted>http://docs.sencha.com/gxt/4.x/getting_started/Getting_Started.html</link.gettingStarted>
+    <link.themeBuilder>http://docs.sencha.com/gxt/4.x/concepts/ThemeBuilder.html</link.themeBuilder>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>google.sonatype.snapshots</id>
+      <name>Google's Sonatype snapshot repository</name>
+      <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>google.sonatype.snapshots</id>
+      <name>Google's Sonatype snapshot repository</name>
+      <url>https://oss.sonatype.org/content/repositories/google-snapshots/</url>
+      <layout>default</layout>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.google.code.maven-license-plugin</groupId>
+          <artifactId>maven-license-plugin</artifactId>
+          <version>1.4.0</version>
+          <configuration>
+            <mapping>
+              <cssTemplate>JAVADOC_STYLE</cssTemplate>
+              <gss>JAVADOC_STYLE</gss>
+              <svg>XML_STYLE</svg>
+              <theme>JAVADOC_STYLE</theme>
+            </mapping>
+            <basedir>${project.build.directory}/classes</basedir>
+            <excludes>
+              <exclude>**/*.json</exclude>
+              <exclude>**/*.html</exclude>
+            </excludes>
+            <header>${project.basedir}/../build/src/main/docs/license/license_${license}.txt</header>
+            <properties>
+              <project.version>${project.version}</project.version>
+              <license>${license}</license>
+              <license.fromYear>${license.fromYear}</license.fromYear>
+              <license.thruYear>${license.thruYear}</license.thruYear>
+              <license.email>${license.email}</license.email>
+              <license.url>${license.url}</license.url>
+            </properties>
+            <quiet>true</quiet>
+          </configuration>
+          <executions>
+            <execution>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>format</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.6</version>
+          <executions>
+            <execution>
+              <!-- Ensure that the license files are copied into META-INF/ -->
+              <id>copy-license</id>
+              <inherited>true</inherited>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                <resources>
+                  <resource>
+                    <targetPath>META-INF</targetPath>
+                    <directory>${project.basedir}/../build/src/main/docs/license</directory>
+                    <filtering>true</filtering>
+                    <includes>
+                      <include>license_${license}.txt</include>
+                      <include>license_thirdparty.md</include>
+                    </includes>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>gwt-maven-plugin</artifactId>
+          <version>${gwt.plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.google.gwt</groupId>
+              <artifactId>gwt-user</artifactId>
+              <version>${gwt.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.google.gwt</groupId>
+              <artifactId>gwt-dev</artifactId>
+              <version>${gwt.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <!-- Build and attach javadocs -->
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9.1</version>
+          <configuration>
+            <links>
+              <link>http://docs.oracle.com/javase/6/docs/api/</link>
+              <link>http://docs.sencha.com/gxt/4.x/javadoc/gwt-2.7.0/</link>
+            </links>
+            <show>public</show>
+            <quiet>true</quiet>
+            <excludePackageNames>
+              *.rebind.*:com.sencha.gxt.desktop:com.sencha.gxt.desktopapp:com.sencha.gxt.examples:com.sencha.gxt.explorer:com.sencha.gxt.test:com.google:com.sencha.cli:com.sencha.command:com.sencha.exceptions:com.sencha.tools:com.sencha.util:com.sencha.logging:com.sencha.gxt.themebuilder
+            </excludePackageNames>
+            <groups>
+              <group>
+                <title>Core Packages</title>
+                <packages>com.sencha.gxt*</packages>
+              </group>
+              <group>
+                <title>Drawing and Charts</title>
+                <packages>com.sencha.gxt.chart*</packages>
+              </group>
+              <group>
+                <title>Base Theme</title>
+                <packages>com.sencha.gxt.theme.base*</packages>
+              </group>
+              <group>
+                <title>Blue Theme</title>
+                <packages>com.sencha.gxt.theme.blue*</packages>
+              </group>
+              <group>
+                <title>Gray Theme</title>
+                <packages>com.sencha.gxt.theme.gray*</packages>
+              </group>
+            </groups>
+            <splitindex/>
+            <use/>
+            <windowtitle>Sencha GXT ${project.version}</windowtitle>
+            <doctitle>Sencha GXT ${project.version} API</doctitle>
+            <header>Sencha GXT ${project.version}</header>
+          </configuration>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.1.2</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>com.google.code.maven-license-plugin</groupId>
+                    <artifactId>maven-license-plugin</artifactId>
+                    <versionRange>[1.4.0,)</versionRange>
+                    <goals>
+                      <goal>format</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  <modules>
+    <module>com.sencha.gxt.ui</module>
+    <module>com.sencha.gxt.chart</module>
+    <module>com.sencha.gxt.themebuilder</module>
+    <module>com.sencha.gxt.theme.neptune</module>
+    <module>com.sencha.gxt.theme.triton</module>
+    <module>com.sencha.gxt.examples</module>
+    <module>build</module>
+  </modules>
+  <profiles>
+    <profile>
+      <id>doc-build</id>
+      <properties>
+        <gwt.compiler.skip>true</gwt.compiler.skip>
+      </properties>
+      <modules>
+        <module>com.sencha.gxt.ui</module>
+        <module>com.sencha.gxt.chart</module>
+        <module>com.sencha.gxt.themebuilder</module>
+        <module>com.sencha.gxt.theme.neptune</module>
+        <module>com.sencha.gxt.theme.triton</module>
+        <module>com.sencha.gxt.examples</module>
+      </modules>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>agg-javadoc</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>aggregate-jar</goal>
+                </goals>
+                <configuration>
+                  <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+                  <docletArtifact>
+                    <groupId>org.umlgraph</groupId>
+                    <artifactId>umlgraph</artifactId>
+                    <version>5.6.6</version>
+                  </docletArtifact>
+                  <additionalparam>
+                    -horizontal
+                  </additionalparam>
+                  <header>
+                    <![CDATA[
+                  <!-- Google Analytics -->
+                  <script type="text/javascript">
+                    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                    ga('create', 'UA-1396058-24', 'gxt-javadoc');
+                    ga('send', 'pageview');
+                  </script>
+
+                  <!-- Google Analytics (deprecated) -->
+                  <script type="text/javascript">
+                    var _gaq = _gaq || [];
+                    _gaq.push(['_setAccount', 'UA-1396058-10']);
+                    _gaq.push(['_trackPageview']);
+                    (function() {
+                      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                    })();
+                  </script>
+
+                  <!-- Menu Links -->
+                  <script type="text/javascript">
+                    var hasNav = document.getElementsByClassName('topNav').length!=0;
+                    if (hasNav) {
+                      var el = document.getElementById('javadocsHeader');
+                      el.style.display = 'block';
+                    }
+                  </script>
+                  <div id="javadocsHeader">
+                    GXT:
+                    <a href="${link.product}" target="_blank">Home</a>
+                    <a href="${link.examples}" target="_blank">Examples</a>
+                    <a href="./../" target="_blank">Guides</a>
+                  </div>
+                  ]]>
+                  </header>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!-- Runs all tests, including module smoke tests for both explorer and integration tests -->
+      <id>all-tests</id>
+      <modules>
+        <module>com.sencha.gxt.ui</module>
+        <module>com.sencha.gxt.chart</module>
+        <module>com.sencha.gxt.themebuilder</module>
+        <module>com.sencha.gxt.theme.neptune</module>
+        <module>com.sencha.gxt.theme.triton</module>
+        <module>com.sencha.gxt.examples</module>
+        <module>com.sencha.gxt.it</module>
+        <module>build</module>
+      </modules>
+    </profile>
+  </profiles>
+
+  <scm>
+    <connection>scm:git:https://github.com/sencha/gxt.git</connection>
+    <developerConnection>scm:git:git@github.com:sencha/gxt.git</developerConnection>
+    <url>https://github.com/sencha/gxt.git</url>
+    <tag>HEAD</tag>
+  </scm>
+</project>

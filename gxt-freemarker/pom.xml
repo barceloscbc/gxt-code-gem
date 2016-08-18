@@ -4,17 +4,88 @@
 	<groupId>br.com.poc</groupId>
 	<artifactId>gxt-freemarker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<dependencies>
+		<!-- GXT -->
+		<dependency>
+			<groupId>com.sencha.gxt</groupId>
+			<artifactId>gxt</artifactId>
+			<version>${gxt.version}</version>
+			<systemPath>${basedir}/lib/gxt-4.0.1.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+
+		<!-- Charts -->
+		<dependency>
+			<groupId>com.sencha.gxt</groupId>
+			<artifactId>gxt-chart</artifactId>
+			<version>${gxt.version}</version>
+			<systemPath>${basedir}/lib/gxt-chart-4.0.1.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<!-- GXT 4.0.0+ - Triton Theme -->
+		<dependency>
+			<groupId>com.sencha.gxt</groupId>
+			<artifactId>gxt-theme-triton</artifactId>
+			<version>${gxt.version}</version>
+			<systemPath>${basedir}/lib/gxt-theme-triton-4.0.1.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+			<classifier>sources</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>1.0.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt.inject</groupId>
+			<artifactId>gin</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>com.googlecode.fmpp-maven-plugin</groupId>
 				<artifactId>fmpp-maven-plugin</artifactId>
 				<version>1.0</version>
-				<!-- configuration>
-					<cfgFile>src/test/resources/freemarker/config.fmpp</cfgFile>
-					<outputDirectory>target/test/generated-sources/fmpp/</outputDirectory>
-					<templateDirectory>src/test/resources/fmpp/</templateDirectory>
-				</configuration-->
+				<!-- configuration> <cfgFile>src/test/resources/freemarker/config.fmpp</cfgFile> 
+					<outputDirectory>target/test/generated-sources/fmpp/</outputDirectory> <templateDirectory>src/test/resources/fmpp/</templateDirectory> 
+					</configuration -->
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -23,6 +94,15 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -53,7 +133,19 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>
+	<repositories>
+		<repository>
+			<id>sencha-gxt-repository</id>
+			<name>Sencha GXT Repository</name>
+			<url>https://https://maven.sencha.com/repo/repo/</url>
+		</repository>
+	</repositories>
+	<properties>
+		<gxt.version>4.0.1</gxt.version>
+		<gwt.version>2.7.0</gwt.version>
+	</properties>
 </project>
