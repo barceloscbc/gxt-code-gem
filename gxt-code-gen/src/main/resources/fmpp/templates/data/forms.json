@@ -1,0 +1,34 @@
+[
+	{
+		"name": "Usuario",
+		"package": "br.com.empresa.client.ui.components",
+		"imports":[
+			"com.sencha.gxt.widget.core.client.form.FieldLabel",
+			"com.sencha.gxt.widget.core.client.form.FieldSet",
+			"com.sencha.gxt.widget.core.client.form.TextField"
+		],
+		"fields": [
+			{
+				"type":"TextField",
+				"name":"firstName"
+			},
+			{
+				"type":"TextField",
+				"name":"lastName"
+			}
+		]
+	},
+	{
+		"name": "Cliente",
+		"package": "br.com.empresa.client.ui.components",
+		"imports":[
+			"com.sencha.gxt.widget.core.client.form.FieldLabel",
+			"com.sencha.gxt.widget.core.client.form.FieldSet",
+			"com.sencha.gxt.widget.core.client.form.TextField"
+		],
+		"fields": [
+			"HTML",
+			"CSS"
+		]
+	}
+]

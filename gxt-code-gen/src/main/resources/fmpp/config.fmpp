@@ -1,0 +1,3 @@
+data: {
+	forms:json(data/forms.json, UTF-8)
+}
