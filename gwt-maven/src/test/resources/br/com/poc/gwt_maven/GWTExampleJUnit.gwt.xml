@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="GWTExample">
+  <!-- Inherit our applications main module.                      -->
+  <inherits name='br.com.poc.gwt_maven.GWTExample' />
+
+  <!-- Specify the path to any remote services.                   -->
+  <servlet path="/GWTExample/greet" class="br.com.poc.gwt_maven.server.GreetingServiceImpl" />
+
+</module>
