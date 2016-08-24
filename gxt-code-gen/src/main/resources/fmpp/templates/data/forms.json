@@ -27,8 +27,14 @@
 			"com.sencha.gxt.widget.core.client.form.TextField"
 		],
 		"fields": [
-			"HTML",
-			"CSS"
+			{
+				"type":"TextField",
+				"name":"firstName"
+			},
+			{
+				"type":"TextField",
+				"name":"lastName"
+			}
 		]
 	}
 ]
